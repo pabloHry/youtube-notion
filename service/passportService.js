@@ -2,6 +2,7 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import jwt from "jsonwebtoken";
 import fs from "fs";
+import path from "path";
 
 passport.use(
   "google",
@@ -26,8 +27,10 @@ passport.use(
           access_token: accessToken,
           token: token,
         };
+        const jsonDirectory = path.join(process.cwd(), "json");
+        console.log(jsonDirectory + "/data.json");
         fs.writeFile(
-          "./data.json",
+          jsonDirectory + "/data.json",
           JSON.stringify(jsonContent),
           "utf8",
           function (err) {

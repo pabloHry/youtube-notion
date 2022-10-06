@@ -1,29 +1,31 @@
 import { getCookie, removeCookies } from "cookies-next";
 import Head from "next/head";
 import React from "react";
-import { Box, Button, Heading, HStack, Text } from "@chakra-ui/react";
+import { Box, Button, Heading, HStack, Spinner, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useState } from "react";
-import content from "../data.json";
 import axios from "axios";
+import useSWR from "swr";
 
 const Dashboard = () => {
   const [token, setToken] = useState();
   const [result, setResult] = useState([]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!content.access_token) window.location.href = "/";
-    window.localStorage.setItem("access_token", content.access_token);
-    setToken(localStorage.getItem("access_token"));
-  }, []);
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const { data } = useSWR("/api/userData", fetcher);
 
+  useEffect(() => {
+    window.localStorage.setItem("access_token", data?.access_token);
+    setToken(localStorage.getItem("access_token"));
+  }, [data]);
+
+  if (!data) return <Spinner />;
   const getListVideoYoutube = () => {
     axios
       .get(
         "https://youtube.googleapis.com/youtube/v3/captions?part=snippet&videoId=IQrk4J6wF9A",
         {
           headers: {
-            Authorization: `Bearer ${content.access_token}`,
+            Authorization: `Bearer ${data.access_token}`,
             Accept: `application/json`,
           },
         }
