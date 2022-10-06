@@ -9,9 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.3.5",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@jswork/next-local-storage": "^1.0.4",
+    "@types/passport": "^1.0.11",
+    "@types/passport-google-oauth20": "^2.0.11",
+    "axios": "^1.1.0",
+    "cookies-next": "^2.1.1",
+    "framer-motion": "^6",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
     "next": "12.3.1",
+    "next-connect": "^0.13.0",
+    "passport": "^0.6.0",
+    "passport-google-oauth2": "^0.2.0",
+    "passport-google-oauth20": "^2.0.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-icons": "^4.4.0"
   },
   "devDependencies": {
     "eslint": "8.24.0",
