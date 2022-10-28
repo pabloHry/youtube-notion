@@ -12,7 +12,7 @@ export default function Home() {
           variant={"outline"}
           leftIcon={<FcGoogle />}>
           <Center>
-            <Text>Sign in with Google</Text>
+            <Text>YOUTION</Text>
           </Center>
         </Button>
       </Link>

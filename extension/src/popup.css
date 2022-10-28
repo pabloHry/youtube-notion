@@ -42,6 +42,10 @@ input {
   align-items: center;
 }
 
+#isConnectedToNotion {
+  display: none;
+}
+
 .app {
   height: 100%;
   display: flex;

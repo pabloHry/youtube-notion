@@ -9,10 +9,15 @@ import axios from "axios";
     type: "START",
   });
 
-  chrome.cookies.getAll(
-    { url: "https://www.notion.so/" },
-    function (cookie) {}
-  );
+  const responseCookieNotion = await chrome.cookies.getAll({
+    url: "https://www.notion.so/",
+  });
+
+  if (responseCookieNotion.length <= 6) {
+    document.getElementById("notion").innerHTML =
+      "You are not logged in to Notion. Please log in and try again.";
+    document.getElementById("isConnectedToNotion").style.display = "block";
+  }
 
   document.addEventListener("DOMContentLoaded", function () {
     document
@@ -36,12 +41,6 @@ import axios from "axios";
     }
 
     /* Setting the innerHTML of the element with id urlClipYoutube to the url of the youtube video. */
-    document.getElementById(
-      "urlClipYoutube"
-    ).innerHTML = `https://www.youtube.com/embed/${videoId}?start=${timestamp}&end=${
-      timestamp + videoEnd
-    }&autoplay=1`;
-
     const urlLinkYoutube = `https://www.youtube.com/embed/${videoId}?start=${timestamp}&end=${
       timestamp + videoEnd
     }&autoplay=1`;
@@ -54,21 +53,15 @@ import axios from "axios";
   chrome.runtime.onMessage.addListener(async (request) => {
     /* Checking if the message is something_completed. */
     const { timestamp, url, title } = request.data;
-
     if (request.msg === "something_completed") {
       const videoId = url.split("=")[1];
       const videoEnd = timestamp + 10;
 
       /* Setting the innerHTML of the element with id urlClipYoutube to the url of the youtube video. */
-      document.getElementById(
-        "urlClipYoutube"
-      ).innerHTML = `https://www.youtube.com/embed/${videoId}?start=${timestamp}&end=${
-        timestamp + 10
-      }&autoplay=1`;
 
       const urlLinkYoutube = `https://www.youtube.com/embed/${
-        request.data.url.split("=")[1]
-      }?start=${request.data.time}&end=${request.data.time + 10}&autoplay=1`;
+        url.split("=")[1]
+      }?start=${timestamp}&end=${timestamp + 10}&autoplay=1`;
       /* Setting the videoId and videoTimestamp in the local storage. */
       chrome.storage.local.set({
         videoId,
@@ -89,23 +82,33 @@ import axios from "axios";
       const urlLinkYoutube = await readLocalStorage("urlLinkYoutube");
       const videoEnd = await readLocalStorage("videoEnd");
       const videoId = await readLocalStorage("videoId");
-      document.getElementById("urlClipYoutube").innerHTML = "OK";
-
-      await axios.get("http://localhost:3000/api/transcript", {
-        params: {
-          url: `https://www.youtube.com/watch?v=${videoId}`,
-          start: timestamp,
-          end: timestamp + videoEnd,
-        },
-      });
+      const responseTranscript = await axios.get(
+        "http://localhost:3000/api/transcript",
+        {
+          params: {
+            url: `https://www.youtube.com/watch?v=${videoId}`,
+            start: timestamp,
+            end: timestamp + videoEnd,
+          },
+        }
+      );
 
       // const response = await axios.get("http://localhost:3000/api/notion");
-      await axios.get("http://localhost:3000/api/notion", {
-        params: {
-          urlLinkYoutube,
-          title,
-        },
-      });
+      const responseSendToNotion = await axios.get(
+        "http://localhost:3000/api/notion",
+        {
+          params: {
+            urlLinkYoutube,
+            title,
+          },
+        }
+      );
+
+      console.log(responseTranscript.data.message);
+      document.getElementById("validationTranscript").innerHTML =
+        responseTranscript.data.message;
+      document.getElementById("validationNotion").innerHTML =
+        responseSendToNotion.data.message;
     }
   });
 })();
