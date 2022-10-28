@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Yoution</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div id="center">
+      <br />
+      <img
+        src="https://image.noelshack.com/fichiers/2022/41/1/1665362665-image-1-modified.png"
+        style="width: 150px; height: 120px"
+        alt=""
+      />
+      <h1 class="titleYouNotion">YOUTION</h1>
+      <br />
+      <div id="notion">
+        <input
+          value="10"
+          type="number"
+          min="0"
+          id="inputTimeClipYoutube"
+          placeholder="The value must be in seconds (ex 10s)"
+        />
+        <br />
+        <br />
+        <a id="sendToNotion" class="button" target="_blank">
+          <img
+            src="https://cdn.icon-icons.com/icons2/2389/PNG/512/notion_logo_icon_145025.png"
+            style="width: 30px; background: white"
+            alt=""
+          /><b style="top: -10px; left: 5px; position: relative"
+            >Send to notion</b
+          >
+        </a>
+        <br />
+      </div>
+      <div id="urlClipYoutube" />
+      <div id="validation" />
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

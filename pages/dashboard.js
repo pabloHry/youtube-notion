@@ -18,14 +18,13 @@ const Dashboard = () => {
     setToken(localStorage.getItem("access_token"));
   }, [data]);
 
-  if (!data) return <Spinner />;
   const getListVideoYoutube = () => {
     axios
       .get(
         "https://youtube.googleapis.com/youtube/v3/captions?part=snippet&videoId=IQrk4J6wF9A",
         {
           headers: {
-            Authorization: `Bearer ${data.access_token}`,
+            Authorization: `Bearer ya29.a0Aa4xrXM9peUt_22l4xLBqfIRSiMKt_nQIkKihkXUGpazld3gBMECVwUWtWa__x-2hnMNhn7Xo9uUnhs3v4JKKb8vSIq0AR1lebRb_1r4VuLWncCcmwmzl0Q6GwcCu5p2YJ0AMR2oM4T9s5S-aQ4utXEUELu_VQaCgYKATASARMSFQEjDvL90F233FlZYqKfTXvyzFP0mA0165`,
             Accept: `application/json`,
           },
         }
@@ -42,7 +41,7 @@ const Dashboard = () => {
         "https://youtube.googleapis.com/youtube/v3/captions/AUieDaZdpiZk6z7IjwcMFBZEL2Z1YlnQwWNLQgC_U6BOwYXUkyI",
         {
           headers: {
-            Authorization: `Bearer ${content.access_token}`,
+            Authorization: `Bearer ${data.access_token}`,
             Accept: `application/json`,
           },
         }

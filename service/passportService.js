@@ -19,16 +19,18 @@ passport.use(
             id: profile.id,
             created: Date.now().toString(),
             access_token: accessToken,
+            refresh_token: refreshToken,
           },
           "123123"
         );
         const jsonContent = {
           fullname: profile.displayName,
           access_token: accessToken,
+          refresh_token: refreshToken,
           token: token,
         };
         const jsonDirectory = path.join(process.cwd(), "json");
-        console.log(jsonDirectory + "/data.json");
+
         fs.writeFile(
           jsonDirectory + "/data.json",
           JSON.stringify(jsonContent),
@@ -43,9 +45,11 @@ passport.use(
             console.log("JSON file has been saved.");
           }
         );
+        console.log(profile);
         done(null, {
           message: "Auth successful",
           access_token: accessToken,
+          refresh_token: refreshToken,
           tokenJwt: token,
         });
       } catch (err) {
