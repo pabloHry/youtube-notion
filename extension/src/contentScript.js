@@ -4,7 +4,7 @@
  */
 function getCurrentTimestampInfo() {
   /* Getting the current time of the video and the current url. */
-  const time = document.getElementsByTagName('video')[0].currentTime;
+  const time = document.getElementsByTagName("video")[0].currentTime;
   const url = location.href;
   const title = document.title;
 
@@ -18,7 +18,7 @@ function getCurrentTimestampInfo() {
 function listenMessages() {
   /* Listening for a message from the background script. */
   chrome.runtime.onMessage.addListener((request, sender, response) => {
-    if (request.msg === 'obtain-timestamp') {
+    if (request.msg === "obtain-timestamp") {
       const timestampData = getCurrentTimestampInfo();
       response(timestampData);
     }

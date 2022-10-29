@@ -2,7 +2,20 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 
-const submitTranscriptToNotion = async (idBlock) => {
+const submitTranscriptToNotion = async (
+  idBlock,
+  notion_check_cookie_consent,
+  __cf_bm,
+  notion_experiment_device_id,
+  NEXT_LOCALE,
+  notion_locale,
+  g_state,
+  token_v2,
+  notion_user_id,
+  notion_users,
+  notion_cookie_consent,
+  notion_browser_id
+) => {
   const createNewId = uuidv4();
   const transcript = fs.readFileSync("transcript/transcript.txt", "utf8");
 
@@ -62,8 +75,8 @@ const submitTranscriptToNotion = async (idBlock) => {
         "sec-fetch-dest": "empty",
         "sec-fetch-mode": "cors",
         "sec-fetch-site": "none",
-        cookie:
-          'notion_check_cookie_consent=true; __cf_bm=ePFShoGtywq3GUHBW8WPnmIl4HskckNhF3BoruTeBu0-1666963352-0-AS1pJ3BKtCpGJsfAomrT6tFXMgokrNy/M12JlMoGrpz1xJhl7xGrhdo4F5VcSNcz/ySk+q//rQJX0dC8nDU6XhY=; notion_experiment_device_id=bca45cc8-9959-4e47-8f06-4aa0349eb2e6; NEXT_LOCALE=en-US; notion_locale=en-US/autodetect; g_state={"i_l":0}; token_v2=41a3e316ac958b0aba1fc8ad82247756a2527c165b3a778fc1d020f33d05dfc9d5a906aab8ab5caffac2c04bd876d1bccf532e734f51b28734b63e6255015b0f91587ef372f3da3eba187139b399; notion_user_id=be4ed882-99c7-4c77-9fca-62a56d637bde; notion_users=%5B%22be4ed882-99c7-4c77-9fca-62a56d637bde%22%5D; notion_cookie_consent={%22id%22:%22fa11b3c4-bf1d-4fbb-a340-add7a1b3bdcc%22%2C%22permission%22:{%22necessary%22:true%2C%22targeting%22:true%2C%22preference%22:true%2C%22performance%22:true}%2C%22policy_version%22:%22v5%22}; notion_browser_id=dbf3e8e6-ac16-4303-ab14-abf18a9fff10',
+        "x-notion-active-user-header": notion_user_id,
+        cookie: `notion_check_cookie_consent=${notion_check_cookie_consent}; __cf_bm=${__cf_bm}; notion_experiment_device_id=${notion_experiment_device_id}; NEXT_LOCALE=${NEXT_LOCALE}; notion_locale=${notion_locale}; g_state=${g_state}; token_v2=${token_v2}; notion_user_id=${notion_user_id}; notion_users=${notion_users}; notion_cookie_consent=${notion_cookie_consent}; notion_browser_id=${notion_browser_id}`,
       },
     }
   );
