@@ -32,9 +32,8 @@ function queryCurrentTab(queryCallback, url = null) {
 function sendMessageOnVideo(message, responseCallback = null) {
   /* Sending a message to the current YouTube video tab. */
   queryCurrentTab((tabs) => {
-    if (tabs.length > 0) {
+    if (tabs.length > 0)
       chrome.tabs.sendMessage(tabs[0].id, message, responseCallback);
-    }
   }, "https://www.youtube.com/watch?v=*");
 }
 

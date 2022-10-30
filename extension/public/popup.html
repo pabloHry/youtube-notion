@@ -15,52 +15,54 @@
       />
       <h1 class="titleYouNotion">YOUTION</h1>
       <br />
-      <div id="isConnectedToNotion">
-        <a
-          id="connectToNotion"
-          class="button"
-          target="_blank"
-          href="https://www.notion.so/login"
-        >
-          <img
-            src="https://cdn.icon-icons.com/icons2/2389/PNG/512/notion_logo_icon_145025.png"
-            style="width: 30px; background: white"
-          /><b style="top: -10px; left: 5px; position: relative"
-            >Connect to notion</b
+      <div id="isNotOnYoutube">You are not on youtube</div>
+      <div id="isOnYoutube">
+        <div id="isConnectedToNotion">
+          <a
+            id="connectToNotion"
+            class="button"
+            target="_blank"
+            href="https://www.notion.so/login"
           >
-        </a>
-      </div>
-      <br />
-      <div id="notion">
-        <input
-          value="10"
-          type="number"
-          min="0"
-          id="inputTimeClipYoutube"
-          placeholder="The value must be in seconds (ex 10s)"
-        />
+            <img
+              src="https://cdn.icon-icons.com/icons2/2389/PNG/512/notion_logo_icon_145025.png"
+              style="width: 30px; background: white"
+            /><b style="top: -10px; left: 5px; position: relative"
+              >Connect to notion</b
+            >
+          </a>
+        </div>
         <br />
+        <div id="notion">
+          <input
+            value="10"
+            type="number"
+            min="0"
+            id="inputTimeClipYoutube"
+            placeholder="The value must be in seconds (ex 10s)"
+          />
+          <br />
+          <br />
+          <a id="sendToNotion" class="button" target="_blank">
+            <img
+              src="https://cdn.icon-icons.com/icons2/2389/PNG/512/notion_logo_icon_145025.png"
+              style="width: 30px; background: white"
+              alt=""
+            /><b style="top: -10px; left: 5px; position: relative"
+              >Send to notion</b
+            >
+          </a>
+          <br />
+        </div>
+        <div id="validationTranscript" />
+        <div id="validationNotion" />
         <br />
-        <a id="sendToNotion" class="button" target="_blank">
-          <img
-            src="https://cdn.icon-icons.com/icons2/2389/PNG/512/notion_logo_icon_145025.png"
-            style="width: 30px; background: white"
-            alt=""
-          /><b style="top: -10px; left: 5px; position: relative"
-            >Send to notion</b
-          >
-        </a>
-        <br />
-      </div>
-      <div id="validationTranscript" />
-      <div id="validationNotion" />
-      <br />
-      <div id="daw">
-        Workspace
-        <select id="mySelect" />
+        <div id="daw">
+          Workspace
+          <select id="mySelect" />
+        </div>
       </div>
     </div>
-
     <script src="popup.js"></script>
   </body>
 </html>
