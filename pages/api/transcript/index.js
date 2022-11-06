@@ -4,7 +4,6 @@ import fs from "fs";
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async function (req, res, next) {
   const { url, start, end } = req.query;
-
   try {
     const responseHtml = await axios.get(url);
     /* It's using cheerio to parse the html and get the title of the video. */

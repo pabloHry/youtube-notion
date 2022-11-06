@@ -40,8 +40,8 @@ const submitTranscriptToNotion = async (
                 parent_table: "block",
                 alive: true,
                 version: 1,
-                created_time: 1666643126188,
-                last_edited_time: 1666643126188,
+                created_time: Date.now(),
+                last_edited_time: Date.now(),
                 properties: {
                   title: [[transcript]],
                 },

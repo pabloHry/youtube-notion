@@ -39,11 +39,88 @@ import axios from "axios";
       notion_browser_id,
     } = memoryCookieNotion;
 
-    if (responseCookieNotion.length <= 6) {
-      document.getElementById("notion").innerHTML =
-        "You are not logged in to Notion. Please log in and try again.";
-      document.getElementById("isConnectedToNotion").style.display = "block";
-    }
+    if (responseCookieNotion.length <= 6)
+      document.getElementById("isConnectedToNotion").style.display = "none";
+    else
+      document.getElementById("isNotConnectedToNotion").style.display = "none";
+
+    const memoryPagePrivate = {};
+    const memoryPagePublic = {};
+
+    const getAllPages = async () => {
+      const responseGetPagesPrivate = await axios.get(
+        "http://localhost:3000/api/notion/getPagesPrivate",
+        {
+          params: {
+            notion_check_cookie_consent,
+            __cf_bm,
+            notion_experiment_device_id,
+            NEXT_LOCALE,
+            notion_locale,
+            g_state,
+            token_v2,
+            notion_user_id,
+            notion_users,
+            notion_cookie_consent,
+            notion_browser_id,
+            spaceId: await readLocalStorage("spaceId"),
+          },
+        }
+      );
+      const responseGetPagesPublic = await axios.get(
+        "http://localhost:3000/api/notion/getPagesPublic",
+        {
+          params: {
+            notion_check_cookie_consent,
+            __cf_bm,
+            notion_experiment_device_id,
+            NEXT_LOCALE,
+            notion_locale,
+            g_state,
+            token_v2,
+            notion_user_id,
+            notion_users,
+            notion_cookie_consent,
+            notion_browser_id,
+            spaceId: await readLocalStorage("spaceId"),
+          },
+        }
+      );
+
+      const selectPage = document.getElementById("pages");
+
+      const optPrivate = document.createElement("option");
+      optPrivate.value = "----PRIVATE----";
+      optPrivate.text = "----PRIVATE----";
+      selectPage.add(optPrivate);
+
+      for (
+        let index = 0;
+        index < responseGetPagesPrivate.data.length;
+        index++
+      ) {
+        const opt = document.createElement("option");
+        const element = responseGetPagesPrivate.data[index];
+        opt.value = element.title;
+        opt.text = element.title;
+        selectPage.add(opt);
+        memoryPagePrivate[element.title] = element.id;
+      }
+
+      const optPublic = document.createElement("option");
+      optPublic.value = "----PUBLIC----";
+      optPublic.text = "----PUBLIC----";
+      selectPage.add(optPublic);
+
+      for (let index = 0; index < responseGetPagesPublic.data.length; index++) {
+        const opt = document.createElement("option");
+        const element = responseGetPagesPublic.data[index];
+        opt.value = element.title;
+        opt.text = element.title;
+        selectPage.add(opt);
+        memoryPagePublic[element.title] = element.id;
+      }
+    };
 
     document.addEventListener("DOMContentLoaded", function () {
       document
@@ -95,7 +172,9 @@ import axios from "axios";
       }
     );
 
-    const sel = document.getElementById("mySelect");
+    /* Checking if the spaceName is in the local storage. If it is not, it will set the spaceName and
+    spaceId in the local storage. */
+    const sel = document.getElementById("workspace");
     const spaceName = await readLocalStorage("spaceName");
     if (!spaceName) {
       chrome.storage.local.set({
@@ -103,6 +182,8 @@ import axios from "axios";
       });
       chrome.storage.local.set({ spaceId: responseGetSpaces.data[0].id });
     }
+
+    /* Creating a memorySpace object and then looping through the responseGetSpaces.data array. */
     const memorySpace = {};
     for (let index = 0; index < responseGetSpaces.data.length; index++) {
       const opt = document.createElement("option");
@@ -113,13 +194,26 @@ import axios from "axios";
       memorySpace[element.name] = element.id;
     }
 
-    const selectElement = document.getElementById("mySelect");
-    selectElement.addEventListener("change", (event) => {
+    const selectElement = document.getElementById("workspace");
+    selectElement.addEventListener("change", async (event) => {
       chrome.storage.local.set({ spaceName: event.target.value });
       chrome.storage.local.set({ spaceId: memorySpace[event.target.value] });
+      document
+        .querySelectorAll("#pages option")
+        .forEach((option) => option.remove());
+      await getAllPages();
     });
 
-    document.getElementById("mySelect").value = spaceName;
+    document.getElementById("workspace").value = spaceName;
+
+    await getAllPages();
+
+    const selectPagesElement = document.getElementById("pages");
+    selectPagesElement.addEventListener("change", async (event) => {
+      chrome.storage.local.set({
+        parentId: memoryPagePublic[event.target.value],
+      });
+    });
 
     const { timestamp, url, title } = request.data;
 
@@ -152,46 +246,43 @@ import axios from "axios";
       const videoEnd = await readLocalStorage("videoEnd");
       const videoId = await readLocalStorage("videoId");
       const spaceId = await readLocalStorage("spaceId");
-      const responseTranscript = await axios.get(
-        "http://localhost:3000/api/transcript",
-        {
-          params: {
-            url: `https://www.youtube.com/watch?v=${videoId}`,
-            start: timestamp,
-            end: timestamp + videoEnd,
-          },
-        }
-      );
+      const parent_id = await readLocalStorage("parentId");
 
-      const responseSendToNotion = await axios.get(
-        "http://localhost:3000/api/notion",
-        {
-          params: {
-            urlLinkYoutube,
-            title,
-            spaceId,
-            notion_check_cookie_consent,
-            __cf_bm,
-            notion_experiment_device_id,
-            NEXT_LOCALE,
-            notion_locale,
-            g_state,
-            token_v2,
-            notion_user_id,
-            notion_users,
-            notion_cookie_consent,
-            notion_browser_id,
-          },
-        }
-      );
-      document.getElementById("notion").style.display = "none";
-      if (
-        responseTranscript.data.message === "success" &&
-        responseSendToNotion.data.message === "success"
-      ) {
-        document.getElementById("validationTranscript").innerHTML =
-          responseTranscript.data.message;
-      }
+      await axios.get("http://localhost:3000/api/transcript", {
+        params: {
+          url: `https://www.youtube.com/watch?v=${videoId}`,
+          start: timestamp,
+          end: timestamp + videoEnd,
+        },
+      });
+
+      await axios.get("http://localhost:3000/api/notion", {
+        params: {
+          urlLinkYoutube,
+          title,
+          spaceId,
+          parent_id,
+          notion_check_cookie_consent,
+          __cf_bm,
+          notion_experiment_device_id,
+          NEXT_LOCALE,
+          notion_locale,
+          g_state,
+          token_v2,
+          notion_user_id,
+          notion_users,
+          notion_cookie_consent,
+          notion_browser_id,
+        },
+      });
+      //   document.getElementById("notion").style.display = "none";
+      //   if (
+      //     responseTranscript.data.message === "success" &&
+      //     responseSendToNotion.data.message === "success"
+      //   ) {
+      //     document.getElementById("validationTranscript").innerHTML =
+      //       responseTranscript.data.message;
+      //   }
     }
   });
 })();
