@@ -21,19 +21,9 @@ export default async function (req, res, next) {
       {},
       {
         headers: {
-          accept: "*/*",
-          "accept-language": "en-US,en;q=0.9",
-          "cache-control": "no-cache",
-          "content-type": "application/json",
-          pragma: "no-cache",
-          "sec-fetch-dest": "empty",
-          "sec-fetch-mode": "cors",
-          "sec-fetch-site": "none",
-          "sec-gpc": "1",
           "x-notion-active-user-header": notion_user_id,
           cookie: `notion_experiment_device_id=${notion_experiment_device_id}; NEXT_LOCALE=${NEXT_LOCALE}; g_state=${g_state}; token_v2=${token_v2}; notion_user_id=${notion_user_id}; notion_cookie_consent=${notion_cookie_consent}; notion_browser_id=${notion_browser_id}; notion_users=${notion_users}; notion_check_cookie_consent=${notion_check_cookie_consent}; notion_locale=${notion_locale}; __cf_bm=${__cf_bm}`,
         },
-        referrerPolicy: "strict-origin-when-cross-origin",
       }
     );
     const memorySpace = [];
@@ -50,6 +40,9 @@ export default async function (req, res, next) {
       memorySpaceName.push({
         name: responseGetSpaces.data[notion_user_id].space[element].value.name,
         id: responseGetSpaces.data[notion_user_id].space[element].value.id,
+        icon: responseGetSpaces.data[notion_user_id].space[element].value.icon
+          ? responseGetSpaces.data[notion_user_id].space[element].value.icon
+          : "📁",
       });
     }
 

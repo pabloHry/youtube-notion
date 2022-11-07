@@ -20,24 +20,27 @@
     />
   </head>
   <body>
-    <div style="height: 240px">
-      <div
-        class="bg-light border border-top-0 border-end-0 border-start-0"
-        style="width: 100%"
-      >
-        <div class="d-flex justify-content-center align-items-center">
-          <img
-            src="https://image.noelshack.com/fichiers/2022/44/5/1667522276-yoution-no-white.png"
-            class="img-fluid"
-            style="height: 15px"
-          />
-          <h4 class="pt-2" style="margin-left: 5px; font-size: 15px">
-            Yoution
-          </h4>
-        </div>
+    <div
+      class="bg-light border border-top-0 border-end-0 border-start-0"
+      style="width: 100%"
+    >
+      <div class="d-flex justify-content-center align-items-center">
+        <img
+          src="https://image.noelshack.com/fichiers/2022/44/5/1667522276-yoution-no-white.png"
+          class="img-fluid"
+          style="height: 15px"
+        />
+        <h4 class="pt-2" style="margin-left: 5px; font-size: 15px">Yoution</h4>
       </div>
-      <div id="addTo">
-        <p>➕ Create new private page</p>
+    </div>
+    <div id="showOptions">
+      <div id="addTo" class="mx-2">
+        <div id="backPage">
+          <p>⬅️ Back</p>
+        </div>
+        <p id="createPrivatePage" class="text-secondary p-2">
+          ➕ | Create new private page
+        </p>
         <div id="privatePages">
           <p>🔒 Pages Private</p>
         </div>
@@ -45,74 +48,89 @@
           <p>🔓 Pages Public</p>
         </div>
       </div>
-      <div id="isNotOnYoutube">
-        <div class="alert alert-danger text-center" role="alert">
-          ⚠️ You are not on youtube
+      <div id="workspaces">
+        <div id="backWorkspace">
+          <p>⬅️ Back</p>
         </div>
+        <p>🏢 Workspaces</p>
       </div>
-      <div id="isOnYoutube">
-        <div id="isNotConnectedToNotion" class="mt-4">
-          <p class="text-center">
-            You are not logged in to Notion. Please log in and try again.
-          </p>
-          <button
-            type="button"
-            class="btn btn-primary btn-block mx-auto d-block"
-            target="_blank"
-            href="https://www.notion.so/login"
-          >
-            Log in to Notion
-          </button>
-        </div>
-        <div class="col bg-white" id="isConnectedToNotion">
-          <div class="mt-3 d-flex justify-content-center align-items-center">
-            <div class="column text-center">
-              <div class="form-outline w-50 d-block mx-auto">
-                <label for="exampleDataList" class="form-label text-center mt-2"
-                  >Set timer in seconds</label
-                >
-                <input
-                  type="number"
-                  id="typeNumber"
-                  class="form-control"
-                  min="1"
-                  step="1"
-                  value="10"
-                />
-              </div>
-              <br />
-              <button type="button" class="btn btn-primary" id="sendToNotion">
-                Send to notion
-              </button>
-            </div>
-          </div>
-          <div class="mt-4">
-            <div
-              class="d-flex border border-start-0 border-bottom-0 border-end-0 p-1"
-              style="font-size: 12px"
-            >
-              <div class="col-6">
-                <label class="form-label text-center mt-3">Add to</label>
-              </div>
-              <select
-                class="form-select form-select-sm text-center d-block mt-2"
-                style="font-size: 12px; height: 25px"
-                id="pages"
-              ></select>
-            </div>
-            <div
-              class="d-flex border border-start-0 border-bottom-0 border-end-0 my-1 p-1"
-              style="font-size: 12px"
-            >
-              <div class="col-6">
-                <label class="form-label text-center mt-3">Workspace</label>
-              </div>
-              <select
-                class="form-select form-select-sm text-center d-block mt-2"
-                style="font-size: 12px; height: 25px"
-                id="workspace"
+    </div>
+    <div id="ok">
+      <div class="alert alert-success text-center" role="alert">
+        ✔️ Page successfully saved
+      </div>
+    </div>
+    <div id="no">
+      <div class="alert alert-danger text-center" role="alert">
+        ❌ Page not saved
+      </div>
+    </div>
+    <div id="spinner">
+      <div class="spinner-border d-block mx-auto mt-5" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div id="isNotOnYoutube">
+      <div class="alert alert-danger text-center" role="alert">
+        ⚠️ You are not on youtube
+      </div>
+    </div>
+    <div id="isOnYoutube">
+      <div id="isNotConnectedToNotion" class="mt-4">
+        <p class="text-center">
+          You are not logged in to Notion. Please log in and try again.
+        </p>
+        <button
+          type="button"
+          class="btn btn-primary btn-block mx-auto d-block"
+          target="_blank"
+          href="https://www.notion.so/login"
+        >
+          Log in to Notion
+        </button>
+      </div>
+      <div class="col bg-white" id="isConnectedToNotion">
+        <div class="mt-3 d-flex justify-content-center align-items-center">
+          <div class="column text-center">
+            <div class="form-outline w-50 d-block mx-auto">
+              <label for="exampleDataList" class="form-label text-center mt-2"
+                >Set timer in seconds</label
+              >
+              <input
+                type="number"
+                id="typeNumber"
+                class="form-control"
+                min="1"
+                step="1"
+                value="10"
               />
             </div>
+            <br />
+            <button type="button" class="btn btn-primary" id="sendToNotion">
+              Send to notion
+            </button>
+          </div>
+        </div>
+        <div class="mt-4">
+          <div
+            class="d-flex border border-start-0 border-bottom-0 border-end-0 p-1"
+            style="font-size: 12px"
+            id="displayPages"
+          >
+            <div class="col-6">
+              <label class="form-label text-center mt-3">Add to</label>
+            </div>
+            <p class="pageName mt-3"></p>
+          </div>
+          <div
+            class="d-flex border border-start-0 border-bottom-0 border-end-0 p-1"
+            style="font-size: 12px"
+            id="displayWorkspace"
+          >
+            <div class="col-6">
+              <label class="form-label text-center mt-3">Workspace</label>
+            </div>
+            <p class="workspaceName mt-3"></p>
           </div>
         </div>
       </div>

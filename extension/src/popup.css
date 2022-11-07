@@ -14,12 +14,39 @@ body {
   box-sizing: border-box;
 }
 
-#addTo {
-  display: none;
-}
-
 #isNotConnectedToNotion {
   display: block;
+}
+
+#displayWorkspace,
+#displayPages,
+#createPrivatePage,
+.pagesName,
+.workspacesName {
+  transition: 0.5s;
+}
+
+#displayWorkspace:hover,
+#displayPages:hover,
+.pagesName:hover,
+.workspacesName:hover,
+#createPrivatePage:hover {
+  cursor: pointer;
+  background-color: #f6f6f6;
+  transition: 0.5s;
+}
+
+.pagesName {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#spinner,
+#ok,
+#no,
+#workspaces,
+#addTo {
+  display: none;
 }
 
 /* 

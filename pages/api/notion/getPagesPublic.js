@@ -59,6 +59,7 @@ export default async function (req, res, next) {
       pagesPublic.push({
         id: key,
         title: value.value?.name[0][0],
+        icon: value.value.icon,
       });
   }
   res.status(200).json(pagesPublic);

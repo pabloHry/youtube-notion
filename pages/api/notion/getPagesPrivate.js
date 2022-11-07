@@ -39,6 +39,7 @@ export default async function (req, res, next) {
       pagesPrivate.push({
         id: key,
         title: element.properties?.title[0][0],
+        icon: element.format?.page_icon ? element.format?.page_icon : "📄",
       });
   }
 

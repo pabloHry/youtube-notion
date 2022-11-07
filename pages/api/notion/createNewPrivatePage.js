@@ -1,4 +1,4 @@
-import clipYoutubeToNotionService from "../../../service/createDatabasePrivateAndAddClipYoutubeToNotionService";
+import clipYoutubeToNotionService from "../../../service/createPagePrivateAndAddClipYoutubeToNotionService";
 import submitTranscriptToNotion from "../../../service/transcriptToNotionService";
 
 // eslint-disable-next-line import/no-anonymous-default-export
