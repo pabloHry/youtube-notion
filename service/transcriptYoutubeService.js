@@ -49,7 +49,9 @@ const transcriptYoutube = async (url, start, end) => {
 
   for (let index = 0; index < result.length; index++) {
     const element = result[index];
-    memoryTranscript.push(element.text + " ");
+    const text = element.text + " ";
+    const filtered = text.replace(/\s*[\[{(].*?[)}\]]\s*/g, "");
+    memoryTranscript.push(filtered);
   }
 
   return memoryTranscript;
