@@ -48,91 +48,119 @@ import axios from "axios";
     else
       document.getElementById("isNotConnectedToNotion").style.display = "none";
 
-    // ? Get All pages
-    const responseGetPagesPrivate = await axios.get(
-      "https://youtube-notion.vercel.app/api/notion/getPagesPrivate",
-      {
-        params: {
-          notion_check_cookie_consent,
-          __cf_bm,
-          notion_experiment_device_id,
-          NEXT_LOCALE,
-          notion_locale,
-          g_state,
-          token_v2,
-          notion_user_id,
-          notion_users,
-          notion_cookie_consent,
-          notion_browser_id,
-          spaceId: await readLocalStorage("spaceId"),
-        },
-      }
-    );
-    const responseGetPagesPublic = await axios.get(
-      "https://youtube-notion.vercel.app/api/notion/getPagesPublic",
-      {
-        params: {
-          notion_check_cookie_consent,
-          __cf_bm,
-          notion_experiment_device_id,
-          NEXT_LOCALE,
-          notion_locale,
-          g_state,
-          token_v2,
-          notion_user_id,
-          notion_users,
-          notion_cookie_consent,
-          notion_browser_id,
-          spaceId: await readLocalStorage("spaceId"),
-        },
-      }
-    );
+    const getAllPages = async () => {
+      // ? Get All pages
+      const responseGetPagesPrivate = await axios.get(
+        "https://youtube-notion.vercel.app/api/notion/getPagesPrivate",
+        {
+          params: {
+            notion_check_cookie_consent,
+            __cf_bm,
+            notion_experiment_device_id,
+            NEXT_LOCALE,
+            notion_locale,
+            g_state,
+            token_v2,
+            notion_user_id,
+            notion_users,
+            notion_cookie_consent,
+            notion_browser_id,
+            spaceId: await readLocalStorage("spaceId"),
+          },
+        }
+      );
+      const responseGetPagesPublic = await axios.get(
+        "https://youtube-notion.vercel.app/api/notion/getPagesPublic",
+        {
+          params: {
+            notion_check_cookie_consent,
+            __cf_bm,
+            notion_experiment_device_id,
+            NEXT_LOCALE,
+            notion_locale,
+            g_state,
+            token_v2,
+            notion_user_id,
+            notion_users,
+            notion_cookie_consent,
+            notion_browser_id,
+            spaceId: await readLocalStorage("spaceId"),
+          },
+        }
+      );
 
-    for (let index = 0; index < responseGetPagesPrivate.data.length; index++) {
-      const createParagraph = document.createElement("p");
-      const element = responseGetPagesPrivate.data[index];
-      createParagraph.className =
-        "pagesName p-3 border border-bottom-0 border-end-0 border-start-0 mb-0";
-      createParagraph.innerHTML = element.icon + " | " + element.title;
-      document.getElementById("privatePages").appendChild(createParagraph);
-      memoryPagePrivate[element.title] = element.id;
-    }
-
-    for (let index = 0; index < responseGetPagesPublic.data.length; index++) {
-      const createParagraph = document.createElement("p");
-      const element = responseGetPagesPublic.data[index];
-      createParagraph.className =
-        "pagesName p-3 border border-bottom-0 border-end-0 border-start-0 mb-0";
-      createParagraph.innerHTML = element.icon + " | " + element.title;
-      document.getElementById("publicPages").appendChild(createParagraph);
-      memoryPagePublic[element.title] = element.id;
-    }
-    // ? changeTimestampClipYoutube
-
-    const changeTimestampClipYoutube = async () => {
-      /* Getting the videoId and videoTimestamp from the local storage. */
-      const timestamp = await readLocalStorage("timestamp");
-      const videoId = await readLocalStorage("videoId");
-      const videoEnd = parseInt(document.getElementById("typeNumber").value);
-      /* Checking if the end time is less than or equal to 0. If it is, it will alert the user that the end
- time must be greater than 0. */
-      if (videoEnd <= 0) {
-        alert("The end time must be greater than 0");
-        return;
+      for (
+        let index = 0;
+        index < responseGetPagesPrivate.data.length;
+        index++
+      ) {
+        const createParagraph = document.createElement("p");
+        const element = responseGetPagesPrivate.data[index];
+        createParagraph.className =
+          "pagesName p-3 border border-bottom-0 border-end-0 border-start-0 mb-0";
+        createParagraph.innerHTML = element.icon + " | " + element.title;
+        document.getElementById("privatePages").appendChild(createParagraph);
+        memoryPagePrivate[element.title] = element.id;
       }
 
-      /* Setting the innerHTML of the element with id urlClipYoutube to the url of the youtube video. */
-      const urlLinkYoutube = `https://www.youtube.com/embed/${videoId}?start=${timestamp}&end=${
-        timestamp + videoEnd
-      }&autoplay=1`;
+      for (let index = 0; index < responseGetPagesPublic.data.length; index++) {
+        const createParagraph = document.createElement("p");
+        const element = responseGetPagesPublic.data[index];
+        createParagraph.className =
+          "pagesName p-3 border border-bottom-0 border-end-0 border-start-0 mb-0";
+        createParagraph.innerHTML = element.icon + " | " + element.title;
+        document.getElementById("publicPages").appendChild(createParagraph);
+        memoryPagePublic[element.title] = element.id;
+      }
 
-      chrome.storage.local.set({ urlLinkYoutube });
-      chrome.storage.local.set({ timestamp });
-      chrome.storage.local.set({ videoEnd });
+      // ? GET Pages value text content
+
+      const readValue = async (event) => {
+        const text = event.target.textContent;
+        if (memoryPagePrivate[text.split("|")[1].trim()] !== undefined) {
+          chrome.storage.local.set({
+            pageId: memoryPagePrivate[text.split("|")[1].trim()],
+          });
+          chrome.storage.local.set({
+            pageName: text,
+          });
+          document.getElementsByClassName("pageName")[0].innerHTML = text;
+          document.getElementById("addTo").style.display = "none";
+          document.getElementById("isOnYoutube").style.display = "block";
+        } else {
+          chrome.storage.local.set({
+            pageId: memoryPagePublic[text.split("|")[1].trim()],
+          });
+          chrome.storage.local.set({
+            pageName: text,
+          });
+          document.getElementsByClassName("pageName")[0].innerHTML = text;
+          document.getElementById("addTo").style.display = "none";
+          document.getElementById("isOnYoutube").style.display = "block";
+        }
+      };
+      const listPages = document.getElementsByClassName("pagesName");
+
+      [...listPages].forEach((elem) =>
+        elem.addEventListener("click", readValue)
+      );
+
+      // ? Create private page
+
+      const createPrivatePage = document.getElementById("createPrivatePage");
+      createPrivatePage.addEventListener("click", (event) => {
+        const text = event.target.textContent;
+        chrome.storage.local.set({
+          pageName: text,
+        });
+        document.getElementsByClassName("pageName")[0].innerHTML = text;
+        document.getElementById("addTo").style.display = "none";
+        document.getElementById("isOnYoutube").style.display = "block";
+      });
+
+      document.getElementsByClassName("pageName")[0].innerHTML =
+        await readLocalStorage("pageName");
     };
-    document
-      .getElementById("typeNumber")
-      .addEventListener("change", changeTimestampClipYoutube);
 
     // ? Get Workspace
 
@@ -167,52 +195,6 @@ import axios from "axios";
       memorySpace[element.name] = element.id;
     }
 
-    // ? GET Pages value text content
-
-    const readValue = async (event) => {
-      const text = event.target.textContent;
-      if (memoryPagePrivate[text.split("|")[1].trim()] !== undefined) {
-        chrome.storage.local.set({
-          pageId: memoryPagePrivate[text.split("|")[1].trim()],
-        });
-        chrome.storage.local.set({
-          pageName: text,
-        });
-        document.getElementsByClassName("pageName")[0].innerHTML = text;
-        document.getElementById("addTo").style.display = "none";
-        document.getElementById("isOnYoutube").style.display = "block";
-      } else {
-        chrome.storage.local.set({
-          pageId: memoryPagePublic[text.split("|")[1].trim()],
-        });
-        chrome.storage.local.set({
-          pageName: text,
-        });
-        document.getElementsByClassName("pageName")[0].innerHTML = text;
-        document.getElementById("addTo").style.display = "none";
-        document.getElementById("isOnYoutube").style.display = "block";
-      }
-    };
-    const listPages = document.getElementsByClassName("pagesName");
-
-    [...listPages].forEach((elem) => elem.addEventListener("click", readValue));
-
-    // ? Create private page
-
-    const createPrivatePage = document.getElementById("createPrivatePage");
-    createPrivatePage.addEventListener("click", (event) => {
-      const text = event.target.textContent;
-      chrome.storage.local.set({
-        pageName: text,
-      });
-      document.getElementsByClassName("pageName")[0].innerHTML = text;
-      document.getElementById("addTo").style.display = "none";
-      document.getElementById("isOnYoutube").style.display = "block";
-    });
-
-    document.getElementsByClassName("pageName")[0].innerHTML =
-      await readLocalStorage("pageName");
-
     // ? GET Workspace value text content
 
     const readWorkspaceValue = async (event) => {
@@ -220,9 +202,15 @@ import axios from "axios";
       chrome.storage.local.set({
         workspaceName: text,
       });
+      chrome.storage.local.set({
+        spaceId: memorySpace[text.split("|")[1].trim()],
+      });
       document.getElementsByClassName("workspaceName")[0].innerHTML = text;
       document.getElementById("workspaces").style.display = "none";
       document.getElementById("isOnYoutube").style.display = "block";
+      document.querySelectorAll(".pagesName").forEach((e) => e.remove());
+      await getAllPages();
+      document.getElementsByClassName("pageName")[0].innerHTML = "No selected";
     };
 
     const WorkspaceNameparagraph =
@@ -245,6 +233,35 @@ import axios from "axios";
       document.getElementById("addTo").style.display = "block";
       document.getElementById("isOnYoutube").style.display = "none";
     });
+
+    await getAllPages();
+
+    // ? changeTimestampClipYoutube
+
+    const changeTimestampClipYoutube = async () => {
+      /* Getting the videoId and videoTimestamp from the local storage. */
+      const timestamp = await readLocalStorage("timestamp");
+      const videoId = await readLocalStorage("videoId");
+      const videoEnd = parseInt(document.getElementById("typeNumber").value);
+      /* Checking if the end time is less than or equal to 0. If it is, it will alert the user that the end
+ time must be greater than 0. */
+      if (videoEnd <= 0) {
+        alert("The end time must be greater than 0");
+        return;
+      }
+
+      /* Setting the innerHTML of the element with id urlClipYoutube to the url of the youtube video. */
+      const urlLinkYoutube = `https://www.youtube.com/embed/${videoId}?start=${timestamp}&end=${
+        timestamp + videoEnd
+      }&autoplay=1`;
+
+      chrome.storage.local.set({ urlLinkYoutube });
+      chrome.storage.local.set({ timestamp });
+      chrome.storage.local.set({ videoEnd });
+    };
+    document
+      .getElementById("typeNumber")
+      .addEventListener("change", changeTimestampClipYoutube);
 
     // ? Back
 
