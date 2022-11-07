@@ -50,11 +50,12 @@ export default async function (req, res, next) {
       (item) => item.offset >= start && item.offset <= end
     );
 
-    const transcriptDirectory = path.join(process.cwd(), "transcript");
-
     for (let index = 0; index < result.length; index++) {
       const element = result[index];
-      fs.writeFile(transcriptDirectory + "/transcript.txt", element.text + " ");
+      fs.writeFile(
+        process.cwd() + "/transcript/transcript.txt",
+        element.text + " "
+      );
     }
     res.status(200).json({ message: "success" });
   } catch (err) {

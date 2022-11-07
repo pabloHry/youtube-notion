@@ -18,10 +18,8 @@ const submitTranscriptToNotion = async (
   notion_browser_id
 ) => {
   const createNewId = uuidv4();
-  const transcriptDirectory = path.join(process.cwd(), "transcript");
-
   const transcript = fs.readFile(
-    transcriptDirectory + "/transcript.txt",
+    process.cwd() + "/transcript/transcript.txt",
     "utf8"
   );
 

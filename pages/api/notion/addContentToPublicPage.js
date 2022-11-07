@@ -26,10 +26,9 @@ export default async function (req, res, next) {
     const createNewId2 = uuidv4();
     const createNewId3 = uuidv4();
     const createNewIdTranscript = uuidv4();
-    const transcriptDirectory = path.join(process.cwd(), "transcript");
 
     const transcript = fs.readFile(
-      transcriptDirectory + "/transcript.txt",
+      process.cwd() + "/transcript/transcript.txt",
       "utf8"
     );
 
