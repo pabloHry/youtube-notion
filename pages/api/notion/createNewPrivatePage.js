@@ -38,6 +38,9 @@ export default async function (req, res, next) {
     );
     await submitTranscriptToNotion(
       idBlock,
+      url,
+      start,
+      end,
       notion_check_cookie_consent,
       __cf_bm,
       notion_experiment_device_id,

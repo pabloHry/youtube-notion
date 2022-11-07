@@ -6,6 +6,9 @@ export default async function (req, res, next) {
     const {
       urlLinkYoutube,
       parent_id,
+      url,
+      start,
+      end,
       title,
       spaceId,
       notion_check_cookie_consent,
@@ -46,6 +49,9 @@ export default async function (req, res, next) {
 
     await submitTranscriptToNotion(
       idBlock,
+      url,
+      start,
+      end,
       notion_check_cookie_consent,
       __cf_bm,
       notion_experiment_device_id,

@@ -1,13 +1,15 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import fs from "fs";
-import path from "path";
+import transcriptYoutube from "../../../service/transcriptYoutubeService";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async function (req, res, next) {
   try {
     const {
       parent_id,
+      url,
+      start,
+      end,
       urlLinkYoutube,
       title,
       notion_check_cookie_consent,
@@ -26,11 +28,7 @@ export default async function (req, res, next) {
     const createNewId2 = uuidv4();
     const createNewId3 = uuidv4();
     const createNewIdTranscript = uuidv4();
-
-    const transcript = fs.readFile(
-      process.cwd() + "/transcript/transcript.txt",
-      "utf8"
-    );
+    const transcript = await transcriptYoutube(url, start, end);
 
     await axios.post(
       "https://www.notion.so/api/v3/submitTransaction",

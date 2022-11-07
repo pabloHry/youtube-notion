@@ -294,20 +294,13 @@ import axios from "axios";
       const spaceId = await readLocalStorage("spaceId");
 
       if (pageName.split("|")[1].trim() === "Create new private page") {
-        const responseTranscript = await axios.get(
-          "https://youtube-notion.vercel.app/api/transcript",
+        const responseCreatePage = await axios.get(
+          "https://youtube-notion.vercel.app/api/notion/createNewPrivatePage",
           {
             params: {
               url: `https://www.youtube.com/watch?v=${videoId}`,
               start: timestamp,
               end: timestamp + videoEnd,
-            },
-          }
-        );
-        const responseCreatePage = await axios.get(
-          "https://youtube-notion.vercel.app/api/notion/createNewPrivatePage",
-          {
-            params: {
               urlLinkYoutube,
               title,
               spaceId,
@@ -326,30 +319,20 @@ import axios from "axios";
           }
         );
         document.getElementById("isOnYoutube").style.display = "none";
-        if (
-          responseCreatePage.data.message === "success" &&
-          responseTranscript.data.message === "success"
-        )
+        if (responseCreatePage.data.message === "success")
           document.getElementById("ok").style.display = "block";
         else document.getElementById("no").style.display = "block";
       } else {
         const parent_id = await readLocalStorage("pageId");
         if (memoryPagePrivate[pageName.split("|")[1].trim()] !== undefined) {
-          const responseTranscript = await axios.get(
-            "https://youtube-notion.vercel.app/api/transcript",
-            {
-              params: {
-                url: `https://www.youtube.com/watch?v=${videoId}`,
-                start: timestamp,
-                end: timestamp + videoEnd,
-              },
-            }
-          );
           const responsePrivatePage = await axios.get(
             "https://youtube-notion.vercel.app/api/notion/addContentToPrivatePage",
             {
               params: {
                 urlLinkYoutube,
+                url: `https://www.youtube.com/watch?v=${videoId}`,
+                start: timestamp,
+                end: timestamp + videoEnd,
                 title,
                 spaceId,
                 parent_id,
@@ -369,28 +352,18 @@ import axios from "axios";
           );
 
           document.getElementById("isOnYoutube").style.display = "none";
-          if (
-            responsePrivatePage.data.message === "success" &&
-            responseTranscript.data.message === "success"
-          )
+          if (responsePrivatePage.data.message === "success")
             document.getElementById("ok").style.display = "block";
           else document.getElementById("no").style.display = "block";
         } else {
-          const responseTranscript = await axios.get(
-            "https://youtube-notion.vercel.app/api/transcript",
-            {
-              params: {
-                url: `https://www.youtube.com/watch?v=${videoId}`,
-                start: timestamp,
-                end: timestamp + videoEnd,
-              },
-            }
-          );
           const reponsePublicPage = await axios.get(
             "https://youtube-notion.vercel.app/api/notion/addContentToPublicPage",
             {
               params: {
                 urlLinkYoutube,
+                url: `https://www.youtube.com/watch?v=${videoId}`,
+                start: timestamp,
+                end: timestamp + videoEnd,
                 title,
                 spaceId,
                 parent_id,
@@ -410,10 +383,7 @@ import axios from "axios";
           );
 
           document.getElementById("isOnYoutube").style.display = "none";
-          if (
-            reponsePublicPage.data.message === "success" &&
-            responseTranscript.data.message === "success"
-          )
+          if (reponsePublicPage.data.message === "success")
             document.getElementById("ok").style.display = "block";
           else document.getElementById("no").style.display = "block";
         }

@@ -1,10 +1,12 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import fs from "fs";
-import path from "path";
+import transcriptYoutube from "./transcriptYoutubeService";
 
 const submitTranscriptToNotion = async (
   idBlock,
+  url,
+  start,
+  end,
   notion_check_cookie_consent,
   __cf_bm,
   notion_experiment_device_id,
@@ -18,10 +20,8 @@ const submitTranscriptToNotion = async (
   notion_browser_id
 ) => {
   const createNewId = uuidv4();
-  const transcript = fs.readFile(
-    process.cwd() + "/transcript/transcript.txt",
-    "utf8"
-  );
+
+  const transcript = await transcriptYoutube(url, start, end);
 
   await axios.post(
     "https://www.notion.so/api/v3/submitTransaction",
