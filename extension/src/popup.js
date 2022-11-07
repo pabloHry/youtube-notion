@@ -193,9 +193,11 @@ import axios from "axios";
         document.getElementById("isOnYoutube").style.display = "block";
       }
     };
-    const para = document.getElementsByClassName("pagesName");
+    const listPages = document.getElementsByClassName("pagesName");
 
-    [...para].forEach((elem) => elem.addEventListener("click", readValue));
+    [...listPages].forEach((elem) => elem.addEventListener("click", readValue));
+
+    // ? Create private page
 
     const createPrivatePage = document.getElementById("createPrivatePage");
     createPrivatePage.addEventListener("click", (event) => {
@@ -302,7 +304,7 @@ import axios from "axios";
             },
           }
         );
-        const reponsePage = await axios.get(
+        const responseCreatePage = await axios.get(
           "http://localhost:3000/api/notion/createNewPrivatePage",
           {
             params: {
@@ -325,53 +327,96 @@ import axios from "axios";
         );
         document.getElementById("isOnYoutube").style.display = "none";
         if (
-          reponsePage.data.message === "success" &&
+          responseCreatePage.data.message === "success" &&
           responseTranscript.data.message === "success"
         )
           document.getElementById("ok").style.display = "block";
         else document.getElementById("no").style.display = "block";
       } else {
         const parent_id = await readLocalStorage("pageId");
+        if (memoryPagePrivate[pageName.split("|")[1].trim()] !== undefined) {
+          const responseTranscript = await axios.get(
+            "http://localhost:3000/api/transcript",
+            {
+              params: {
+                url: `https://www.youtube.com/watch?v=${videoId}`,
+                start: timestamp,
+                end: timestamp + videoEnd,
+              },
+            }
+          );
+          const responsePrivatePage = await axios.get(
+            "http://localhost:3000/api/notion/addContentToPrivatePage",
+            {
+              params: {
+                urlLinkYoutube,
+                title,
+                spaceId,
+                parent_id,
+                notion_check_cookie_consent,
+                __cf_bm,
+                notion_experiment_device_id,
+                NEXT_LOCALE,
+                notion_locale,
+                g_state,
+                token_v2,
+                notion_user_id,
+                notion_users,
+                notion_cookie_consent,
+                notion_browser_id,
+              },
+            }
+          );
 
-        const responseTranscript = await axios.get(
-          "http://localhost:3000/api/transcript",
-          {
-            params: {
-              url: `https://www.youtube.com/watch?v=${videoId}`,
-              start: timestamp,
-              end: timestamp + videoEnd,
-            },
-          }
-        );
-        const reponsePage = await axios.get(
-          "http://localhost:3000/api/notion/addContentToPublicPage",
-          {
-            params: {
-              urlLinkYoutube,
-              title,
-              spaceId,
-              parent_id,
-              notion_check_cookie_consent,
-              __cf_bm,
-              notion_experiment_device_id,
-              NEXT_LOCALE,
-              notion_locale,
-              g_state,
-              token_v2,
-              notion_user_id,
-              notion_users,
-              notion_cookie_consent,
-              notion_browser_id,
-            },
-          }
-        );
-        document.getElementById("isOnYoutube").style.display = "none";
-        if (
-          reponsePage.data.message === "success" &&
-          responseTranscript.data.message === "success"
-        )
-          document.getElementById("ok").style.display = "block";
-        else document.getElementById("no").style.display = "block";
+          document.getElementById("isOnYoutube").style.display = "none";
+          if (
+            responsePrivatePage.data.message === "success" &&
+            responseTranscript.data.message === "success"
+          )
+            document.getElementById("ok").style.display = "block";
+          else document.getElementById("no").style.display = "block";
+        } else {
+          const responseTranscript = await axios.get(
+            "http://localhost:3000/api/transcript",
+            {
+              params: {
+                url: `https://www.youtube.com/watch?v=${videoId}`,
+                start: timestamp,
+                end: timestamp + videoEnd,
+              },
+            }
+          );
+          const reponsePublicPage = await axios.get(
+            "http://localhost:3000/api/notion/addContentToPublicPage",
+            {
+              params: {
+                urlLinkYoutube,
+                title,
+                spaceId,
+                parent_id,
+                notion_check_cookie_consent,
+                __cf_bm,
+                notion_experiment_device_id,
+                NEXT_LOCALE,
+                notion_locale,
+                g_state,
+                token_v2,
+                notion_user_id,
+                notion_users,
+                notion_cookie_consent,
+                notion_browser_id,
+              },
+            }
+          );
+
+          document.getElementById("isOnYoutube").style.display = "none";
+          if (
+            reponsePublicPage.data.message === "success" &&
+            responseTranscript.data.message === "success"
+          )
+            document.getElementById("ok").style.display = "block";
+          else document.getElementById("no").style.display = "block";
+        }
       }
     }
   });
