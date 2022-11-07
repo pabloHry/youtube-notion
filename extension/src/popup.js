@@ -10,6 +10,7 @@ import axios from "axios";
   });
 
   document.getElementById("isOnYoutube").style.display = "none";
+  document.getElementById("isConnectedToNotion").style.display = "none";
 
   chrome.runtime.onMessage.addListener(async (request) => {
     const memoryCookieNotion = {};
@@ -17,7 +18,6 @@ import axios from "axios";
     const memoryPagePrivate = {};
     const memoryPagePublic = {};
     /* Checking if the message is something_completed. */
-    document.getElementById("isOnYoutube").style.display = "block";
     document.getElementById("isNotOnYoutube").style.display = "none";
 
     // ? Get Notion Cookies
@@ -43,10 +43,13 @@ import axios from "axios";
       notion_browser_id,
     } = memoryCookieNotion;
 
-    if (responseCookieNotion.length <= 6)
-      document.getElementById("isConnectedToNotion").style.display = "none";
-    else
-      document.getElementById("isNotConnectedToNotion").style.display = "none";
+    if (responseCookieNotion.length > 6) {
+      document.getElementById("isConnectedToNotion").style.display = "block";
+      document.getElementById("spinner").style.display = "block";
+    } else {
+      document.getElementById("isNotConnectedToNotion").style.display = "block";
+      return;
+    }
 
     const getAllPages = async () => {
       // ? Get All pages
@@ -160,6 +163,9 @@ import axios from "axios";
 
       document.getElementsByClassName("pageName")[0].innerHTML =
         await readLocalStorage("pageName");
+
+      document.getElementById("spinner").style.display = "none";
+      document.getElementById("isOnYoutube").style.display = "block";
     };
 
     // ? Get Workspace
@@ -210,6 +216,9 @@ import axios from "axios";
       document.getElementById("isOnYoutube").style.display = "block";
       document.querySelectorAll(".pagesName").forEach((e) => e.remove());
       await getAllPages();
+      chrome.storage.local.set({
+        pageName: "No selected",
+      });
       document.getElementsByClassName("pageName")[0].innerHTML = "No selected";
     };
 

@@ -14,10 +14,6 @@ body {
   box-sizing: border-box;
 }
 
-#isNotConnectedToNotion {
-  display: block;
-}
-
 #displayWorkspace,
 #displayPages,
 #createPrivatePage,
@@ -45,6 +41,8 @@ body {
 #ok,
 #no,
 #workspaces,
+#isConnectedToNotion,
+#isNotConnectedToNotion,
 #addTo {
   display: none;
 }
