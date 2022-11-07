@@ -50,7 +50,7 @@ import axios from "axios";
 
     // ? Get All pages
     const responseGetPagesPrivate = await axios.get(
-      "http://localhost:3000/api/notion/getPagesPrivate",
+      "https://youtube-notion.vercel.app/api/notion/getPagesPrivate",
       {
         params: {
           notion_check_cookie_consent,
@@ -69,7 +69,7 @@ import axios from "axios";
       }
     );
     const responseGetPagesPublic = await axios.get(
-      "http://localhost:3000/api/notion/getPagesPublic",
+      "https://youtube-notion.vercel.app/api/notion/getPagesPublic",
       {
         params: {
           notion_check_cookie_consent,
@@ -137,7 +137,7 @@ import axios from "axios";
     // ? Get Workspace
 
     const responseGetWorkspaces = await axios.get(
-      "http://localhost:3000/api/notion/getSpaces",
+      "https://youtube-notion.vercel.app/api/notion/getSpaces",
       {
         params: {
           notion_check_cookie_consent,
@@ -295,7 +295,7 @@ import axios from "axios";
 
       if (pageName.split("|")[1].trim() === "Create new private page") {
         const responseTranscript = await axios.get(
-          "http://localhost:3000/api/transcript",
+          "https://youtube-notion.vercel.app/api/transcript",
           {
             params: {
               url: `https://www.youtube.com/watch?v=${videoId}`,
@@ -305,7 +305,7 @@ import axios from "axios";
           }
         );
         const responseCreatePage = await axios.get(
-          "http://localhost:3000/api/notion/createNewPrivatePage",
+          "https://youtube-notion.vercel.app/api/notion/createNewPrivatePage",
           {
             params: {
               urlLinkYoutube,
@@ -336,7 +336,7 @@ import axios from "axios";
         const parent_id = await readLocalStorage("pageId");
         if (memoryPagePrivate[pageName.split("|")[1].trim()] !== undefined) {
           const responseTranscript = await axios.get(
-            "http://localhost:3000/api/transcript",
+            "https://youtube-notion.vercel.app/api/transcript",
             {
               params: {
                 url: `https://www.youtube.com/watch?v=${videoId}`,
@@ -346,7 +346,7 @@ import axios from "axios";
             }
           );
           const responsePrivatePage = await axios.get(
-            "http://localhost:3000/api/notion/addContentToPrivatePage",
+            "https://youtube-notion.vercel.app/api/notion/addContentToPrivatePage",
             {
               params: {
                 urlLinkYoutube,
@@ -377,7 +377,7 @@ import axios from "axios";
           else document.getElementById("no").style.display = "block";
         } else {
           const responseTranscript = await axios.get(
-            "http://localhost:3000/api/transcript",
+            "https://youtube-notion.vercel.app/api/transcript",
             {
               params: {
                 url: `https://www.youtube.com/watch?v=${videoId}`,
@@ -387,7 +387,7 @@ import axios from "axios";
             }
           );
           const reponsePublicPage = await axios.get(
-            "http://localhost:3000/api/notion/addContentToPublicPage",
+            "https://youtube-notion.vercel.app/api/notion/addContentToPublicPage",
             {
               params: {
                 urlLinkYoutube,

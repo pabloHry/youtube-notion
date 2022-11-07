@@ -1,6 +1,7 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
+import path from "path";
 
 const submitTranscriptToNotion = async (
   idBlock,
@@ -17,7 +18,12 @@ const submitTranscriptToNotion = async (
   notion_browser_id
 ) => {
   const createNewId = uuidv4();
-  const transcript = fs.readFileSync("/transcript/transcript.txt", "utf8");
+  const transcriptDirectory = path.join(process.cwd(), "transcript");
+
+  const transcript = fs.readFile(
+    transcriptDirectory + "/transcript.txt",
+    "utf8"
+  );
 
   await axios.post(
     "https://www.notion.so/api/v3/submitTransaction",

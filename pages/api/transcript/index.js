@@ -1,5 +1,6 @@
 import axios from "axios";
 import fs from "fs";
+import path from "path";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async function (req, res, next) {
@@ -49,11 +50,11 @@ export default async function (req, res, next) {
       (item) => item.offset >= start && item.offset <= end
     );
 
-    const writeStream = fs.createWriteStream("transcript/transcript.txt");
+    const transcriptDirectory = path.join(process.cwd(), "transcript");
 
     for (let index = 0; index < result.length; index++) {
       const element = result[index];
-      writeStream.write(element.text + " ");
+      fs.writeFile(transcriptDirectory + "/transcript.txt", element.text + " ");
     }
     res.status(200).json({ message: "success" });
   } catch (err) {

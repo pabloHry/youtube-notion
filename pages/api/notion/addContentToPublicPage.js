@@ -1,6 +1,8 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
+import path from "path";
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async function (req, res, next) {
   try {
@@ -24,7 +26,12 @@ export default async function (req, res, next) {
     const createNewId2 = uuidv4();
     const createNewId3 = uuidv4();
     const createNewIdTranscript = uuidv4();
-    const transcript = fs.readFileSync("transcript/transcript.txt", "utf8");
+    const transcriptDirectory = path.join(process.cwd(), "transcript");
+
+    const transcript = fs.readFile(
+      transcriptDirectory + "/transcript.txt",
+      "utf8"
+    );
 
     await axios.post(
       "https://www.notion.so/api/v3/submitTransaction",
